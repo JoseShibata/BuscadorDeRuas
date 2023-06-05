@@ -29,9 +29,10 @@ public class MainActivity extends AppCompatActivity {
     List<String> listaBairros;
     Button buttonCarregar;
     Spinner spinnerBairros;
-    TextView textRuas, textBairro;
+    TextView textRua, textBairro;
     String retorno;
     SpinnerManager gerenciadorSpinner;
+    DadosPlanilha dadosPlanilha;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,14 +44,24 @@ public class MainActivity extends AppCompatActivity {
         //System.out.println("---- Digite algum dos nomes abaixo ----");
         spinnerBairros = findViewById(R.id.spinnerBairros);
         buttonCarregar = findViewById(R.id.buttonCarregar);
-        textRuas = findViewById(R.id.textRuas);
+        textRua = findViewById(R.id.textRuas);
         textBairro = findViewById(R.id.textBairro);
         listaBairros = new ArrayList<>();
         gerenciadorSpinner = new SpinnerManager();
+        dadosPlanilha = new DadosPlanilha();
+
 
         try {
-
             InputStream arquivo = getAssets().open("RuasTeste4.xlsx");
+
+            dadosPlanilha.recuperaDados(arquivo, listaBairros, this, spinnerBairros, textRua, textBairro, buttonCarregar);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+/*
+        try {
+
+
 
             Workbook workbook = new XSSFWorkbook(arquivo);
 
@@ -107,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
 
         }catch(IOException e){
             e.printStackTrace();
-        }
+        }*/
     }
 /*
     public String gerarSpinner(){
