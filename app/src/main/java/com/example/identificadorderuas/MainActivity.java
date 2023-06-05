@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         try {
-            InputStream arquivo = getAssets().open("RuasTeste4.xlsx");
+            InputStream arquivo = getAssets().open("RuasTeste16.xlsx");
 
             dadosPlanilha.recuperaDados(arquivo, listaBairros, this, spinnerBairros, textRua, textBairro, buttonCarregar);
         } catch (IOException e) {
