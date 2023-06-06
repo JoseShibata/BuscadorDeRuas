@@ -6,13 +6,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
 public class SpinnerManager {
     String retorno;
 
-    public String spinnerBairros(Spinner spinnerBairros, TextView textRuas, List<String> listaBairros, Context contexto){
+    public String spinnerBairros(Spinner spinnerBairros, List<String> listaBairros, Context contexto){
         ArrayAdapter<String> adapterBairros = new ArrayAdapter<String>(contexto,
                 android.R.layout.simple_spinner_dropdown_item, listaBairros);
 
@@ -24,7 +25,7 @@ public class SpinnerManager {
                 String bairroEscolhido = (spinnerBairros.getSelectedItem().toString());
                 System.out.println("Bairro Escolhido: " + bairroEscolhido);
                 if (bairroEscolhido == "BAIRRO") {
-                    textRuas.setText("Selecione Algum Bairro Para Obter as Ruas!!!");
+                    Toast.makeText(contexto,"Selecione Algum Bairro Para Obter as Ruas!!!", Toast.LENGTH_LONG).show();
                 }
                 retorno = bairroEscolhido;
             }
