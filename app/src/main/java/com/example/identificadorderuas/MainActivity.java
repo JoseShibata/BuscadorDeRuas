@@ -1,6 +1,8 @@
 package com.example.identificadorderuas;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.example.identificadorderuas.adapter.AdapterRecycler;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -33,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     String retorno;
     SpinnerManager gerenciadorSpinner;
     DadosPlanilha dadosPlanilha;
+    private RecyclerView recyclerRuas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +49,8 @@ public class MainActivity extends AppCompatActivity {
         //System.out.println("---- Digite algum dos nomes abaixo ----");
         spinnerBairros = findViewById(R.id.spinnerBairros);
         buttonCarregar = findViewById(R.id.buttonCarregar);
-        textRua = findViewById(R.id.textRuas);
         textBairro = findViewById(R.id.textBairro);
+        recyclerRuas = findViewById(R.id.recyclerRuas);
         listaBairros = new ArrayList<>();
         gerenciadorSpinner = new SpinnerManager();
         dadosPlanilha = new DadosPlanilha();
@@ -54,10 +59,18 @@ public class MainActivity extends AppCompatActivity {
         try {
             InputStream arquivo = getAssets().open("RuasTeste16.xlsx");
 
-            dadosPlanilha.recuperaDados(arquivo, listaBairros, this, spinnerBairros, textRua, textBairro, buttonCarregar);
+            dadosPlanilha.recuperaDados(arquivo, listaBairros, this, spinnerBairros, textBairro, buttonCarregar, recyclerRuas);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
+
+
+
+
+
 /*
         try {
 
