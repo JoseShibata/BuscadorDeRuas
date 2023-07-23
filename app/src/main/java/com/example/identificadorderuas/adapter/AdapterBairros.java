@@ -1,5 +1,6 @@
 package com.example.identificadorderuas.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,16 +9,25 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.identificadorderuas.AlertManager;
+
 import com.example.identificadorderuas.R;
 
 import java.util.List;
 
-public class AdapterRecycler extends RecyclerView.Adapter<AdapterRecycler.MyViewHolder> {
+public class AdapterBairros extends RecyclerView.Adapter<AdapterBairros.MyViewHolder> {
 
     private List<String> listaRuas;
+    private List<String> listaSiglas;
+    private Context context;
+    private AlertManager gerenciadorAlert;
 
-    public AdapterRecycler(List<String> listRuas) {
+    //private DadosPlanilha dadosPlanilha  = new DadosPlanilha();
+
+    public AdapterBairros(List<String> listRuas, List<String> listSiglas, Context context) {
         this.listaRuas = listRuas;
+        this.listaSiglas = listSiglas;
+        this.context = context;
     }
 
     @NonNull
@@ -33,13 +43,27 @@ public class AdapterRecycler extends RecyclerView.Adapter<AdapterRecycler.MyView
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         String rua = listaRuas.get(position);
-        holder.nomeRua.setText(rua);
+        String siglas = listaSiglas.get(position);
+
+        if (rua.equals(siglas))
+            holder.nomeRua.setText(rua);
+        else
+            holder.nomeRua.setText(rua + "("  + siglas);
+
+        holder.nomeRua.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Toast.makeText(context, siglas, Toast.LENGTH_LONG).show();
+                gerenciadorAlert = new AlertManager(context);
+                gerenciadorAlert.alertGoogle(rua + " - TAQUARITINGA");
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
 
-        return listaRuas.size();
+        return (listaRuas.size());
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
@@ -51,7 +75,7 @@ public class AdapterRecycler extends RecyclerView.Adapter<AdapterRecycler.MyView
 
             nomeRua = itemView.findViewById(R.id.textNomeRua);
 
+
         }
     }
-
 }
