@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.example.identificadorderuas.DadosPlanilha;
 import com.example.identificadorderuas.R;
@@ -22,6 +23,7 @@ public class RuaActivity extends AppCompatActivity {
     private InputStream arquivo;
     private RecyclerView recyclerRuas2;
     private TextInputEditText textNumero;
+    private TextView text_sigla;
     private Button botaoEnviar;
 
     @Override
@@ -32,6 +34,7 @@ public class RuaActivity extends AppCompatActivity {
         recyclerRuas2 = findViewById(R.id.recyclerRuas2);
         textNumero = findViewById(R.id.inputNumero);
         botaoEnviar = findViewById(R.id.botaoPesquisar);
+        text_sigla = findViewById(R.id.text_id_sigla);
         dadosPlanilha = new DadosPlanilha(RuaActivity.this);
 
             botaoEnviar.setOnClickListener(new View.OnClickListener() {
@@ -40,7 +43,7 @@ public class RuaActivity extends AppCompatActivity {
 
                     try{
                         arquivo = getAssets().open("RuasTeste25.xlsx");
-                        dadosPlanilha.recuperaRuas(arquivo, textNumero, recyclerRuas2);
+                        dadosPlanilha.recuperaRuas(arquivo, text_sigla, textNumero, recyclerRuas2);
                     }catch (IOException e) {
                         e.printStackTrace();
                     }

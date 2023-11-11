@@ -11,7 +11,7 @@ import com.example.identificadorderuas.R;
 
 public class InicialActivity extends AppCompatActivity {
 
-    ImageButton pesquisaRua, pesquisaBairro;
+    ImageButton pesquisaRua, pesquisaBairro, pesquisaCep;
     Intent intent;
 
     @Override
@@ -21,6 +21,7 @@ public class InicialActivity extends AppCompatActivity {
 
         pesquisaRua = findViewById(R.id.pesquisaRua);
         pesquisaBairro = findViewById(R.id.pesquisaBairro);
+        pesquisaCep = findViewById(R.id.pesquisaCEP);
 
         pesquisaBairro.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,6 +35,14 @@ public class InicialActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 intent = new Intent(getApplicationContext(), RuaActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        pesquisaCep.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intent = new Intent(getApplicationContext(), CepActivity.class);
                 startActivity(intent);
             }
         });

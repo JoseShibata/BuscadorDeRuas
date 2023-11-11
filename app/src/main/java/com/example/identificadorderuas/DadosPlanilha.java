@@ -37,19 +37,19 @@ public class DadosPlanilha {
 
     public void populaCombo(InputStream nomeArquivo, List<String> listaBairros, Spinner spinnerBairros){
 
-        try {
-            Workbook workbook = new XSSFWorkbook(nomeArquivo);
-
-        Sheet sheet2 = workbook.getSheetAt(2);
-        for(Row row : sheet2){
-            for(Cell cell : row){
-                CellType cellType = cell.getCellType();
-                if (cellType == CellType.STRING){
-                    String bairros = cell.getStringCellValue();
-                    listaBairros.add(bairros);
+        try(Workbook workbook = new XSSFWorkbook(nomeArquivo)){
+            Sheet sheet2 = workbook.getSheetAt(2);
+            for(Row row : sheet2){
+                if (listaBairros != null){
+                    for(Cell cell : row){
+                        CellType cellType = cell.getCellType();
+                        if (cellType == CellType.STRING){
+                            String bairros = cell.getStringCellValue();
+                            listaBairros.add(bairros);
+                        }
+                    }
                 }
             }
-        }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -57,41 +57,44 @@ public class DadosPlanilha {
         gerenciadorSpinner.spinnerBairros(spinnerBairros, listaBairros, contexto);
     }
 
-    public void recuperaDados(InputStream nomeArquivo, List<String>listaBairros, Spinner spinnerBairros,
+    public void recuperaDados(InputStream nomeArquivo, List<String> listaBairros, Spinner spinnerBairros,
                               TextView textBairro, RecyclerView recycler) throws IOException {
 
-        Workbook workbook = new XSSFWorkbook(nomeArquivo);
-        Sheet sheet1 = workbook.getSheetAt(0);
-        List<String> siglasEncontradas = new ArrayList<>();
-        List<String> ruasEncontradas = new ArrayList<>();
-        gerenciadorRecycler = new RecyclerManager();
+        try(Workbook workbook = new XSSFWorkbook(nomeArquivo)){
+            Sheet sheet1 = workbook.getSheetAt(0);  // Identifica a tabela a ser usada
+            List<String> siglasEncontradas = new ArrayList<>();
+            List<String> ruasEncontradas = new ArrayList<>();
+            gerenciadorRecycler = new RecyclerManager();
 
-        for (Row rowTabela1 : sheet1) {
-            Cell cellBairroTabela1 = rowTabela1.getCell(0); // Coluna dos bairros na tabela 1
-            if (cellBairroTabela1 != null && cellBairroTabela1.getStringCellValue().equals(gerenciadorSpinner.spinnerBairros(spinnerBairros,listaBairros, contexto))) {
-                Cell cellRuaTabela1 = rowTabela1.getCell(5); // Coluna das ruas na tabela 1
-                Cell cellSiglaTabela1 = rowTabela1.getCell(4); // Coluna das siglas na tabela 1
-                if (cellRuaTabela1 != null && cellSiglaTabela1 != null) {
-                    String ruaTabela1 = cellRuaTabela1.getStringCellValue();
-                    String siglaTabela1 = cellSiglaTabela1.getStringCellValue();
-                    if (ruaTabela1.equals("RUA")) {
-                        textBairro.setText("Selecione Algum Bairro Para Obter as Ruas!!!");
-                    }else{
-                        textBairro.setText(gerenciadorSpinner.spinnerBairros(spinnerBairros,listaBairros, contexto));
-                        ruasEncontradas.add(ruaTabela1);
-                        if (siglaTabela1.equals("remove")) {
-                            siglasEncontradas.add(ruaTabela1);
+            for (Row rowTabela1 : sheet1) {
+                Cell cellBairroTabela1 = rowTabela1.getCell(0); // Coluna dos bairros na tabela 1
+                if (cellBairroTabela1 != null && cellBairroTabela1.getStringCellValue().equals(gerenciadorSpinner.spinnerBairros(spinnerBairros,listaBairros, contexto))) {
+                    Cell cellRuaTabela1 = rowTabela1.getCell(5); // Coluna das ruas na tabela 1
+                    Cell cellSiglaTabela1 = rowTabela1.getCell(4); // Coluna das siglas na tabela 1
+                    if (cellRuaTabela1 != null && cellSiglaTabela1 != null) {
+                        String ruaTabela1 = cellRuaTabela1.getStringCellValue();
+                        String siglaTabela1 = cellSiglaTabela1.getStringCellValue();
+                        if (ruaTabela1.equals("RUA")) {
+                            textBairro.setText("Selecione Algum Bairro Para Obter as Ruas!!!");
                         }else{
-                            siglasEncontradas.add(siglaTabela1);
+                            textBairro.setText(gerenciadorSpinner.spinnerBairros(spinnerBairros,listaBairros, contexto));
+                            ruasEncontradas.add(ruaTabela1);
+                            if (siglaTabela1.equals("remove")) {
+                                siglasEncontradas.add(ruaTabela1);
+                            }else{
+                                siglasEncontradas.add(siglaTabela1);
+                            }
                         }
                     }
                 }
             }
+            gerenciadorRecycler.montadorRecyclerRua(recycler, ruasEncontradas, siglasEncontradas, contexto);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        gerenciadorRecycler.montadorRecyclerRua(recycler, ruasEncontradas, siglasEncontradas, contexto);
     }
 
-    public void recuperaRuas(InputStream nomeArquivo, TextInputEditText textNumero, RecyclerView recycler){
+    public void recuperaRuas(InputStream nomeArquivo, TextView text_id_siglas, TextInputEditText textNumero, RecyclerView recycler){
         try {
 
             Workbook workbook = new XSSFWorkbook(nomeArquivo);
@@ -110,7 +113,7 @@ public class DadosPlanilha {
                     Cell cellRuaTabela1 = rowTabela1.getCell(5); // Coluna das ruas na tabela 1
                     Cell cellBairroTabela1 = rowTabela1.getCell(0); // Coluna dos bairros na tabela 1
                     if (cellRuaTabela1 != null && cellBairroTabela1 != null) {
-                        String nomeRua = cellRuaTabela1.getStringCellValue() + "("+textNumero.getText().toString().toUpperCase()+")";
+                        String nomeRua = cellRuaTabela1.getStringCellValue(); //ATENÇÃÃÃÃÃÃO -> aqui, eu estou atribuindo a variável, a rua resgatada do xlsx e concatenando com a sigla recuperada do usuário
                         String nomeBairro = cellBairroTabela1.getStringCellValue();
                         ruasEncontradas.add(nomeRua);
                         bairrosEncontrados.add(nomeBairro);
@@ -123,6 +126,7 @@ public class DadosPlanilha {
                 Toast.makeText(contexto, "Nenhuma Rua Encontrada", Toast.LENGTH_LONG).show();
             }
             gerenciadorRecycler.montadorRecyclerSigla(recycler, ruasEncontradas, bairrosEncontrados, contexto);
+            text_id_siglas.setText("Buscando por termos: " + "(" + textNumero.getText().toString().toUpperCase() + ")");
 
         }catch(IOException e){
             e.printStackTrace();

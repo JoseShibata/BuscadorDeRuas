@@ -3,8 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.identificadorderuas">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -13,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".layouts.RuaActivity"></activity>
+        <activity android:name=".layouts.CepActivity"></activity>
+        <activity android:name=".layouts.RuaActivity" />
         <activity android:name=".layouts.BairroActivity" />
         <activity
             android:name=".layouts.InicialActivity"
